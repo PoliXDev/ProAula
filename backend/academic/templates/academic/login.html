@@ -1,0 +1,52 @@
+{% extends "academic/base.html" %}
+
+{% block title %}Acceso · ProAula{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-md rounded-2xl bg-white p-6 shadow-sm">
+    <h1 class="font-display text-2xl font-semibold">Acceso del personal</h1>
+    <p class="mt-1 text-sm text-meadow-cerulean">
+      Solo el personal del centro entra a este panel.
+    </p>
+
+    <form method="post" class="mt-6 space-y-4">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <p class="text-sm text-red-700">{{ form.non_field_errors }}</p>
+      {% endif %}
+      <label class="block text-sm font-medium" for="{{ form.username.id_for_label }}">
+        Usuario
+        <input
+          id="{{ form.username.id_for_label }}"
+          name="{{ form.username.html_name }}"
+          type="text"
+          autofocus
+          required
+          class="mt-1 w-full rounded-xl border border-meadow-willow px-3 py-3 outline-none focus:border-meadow-teal"
+        />
+      </label>
+      {% if form.username.errors %}
+        <p class="text-sm text-red-700">{{ form.username.errors }}</p>
+      {% endif %}
+      <label class="block text-sm font-medium" for="{{ form.password.id_for_label }}">
+        Contraseña
+        <input
+          id="{{ form.password.id_for_label }}"
+          name="{{ form.password.html_name }}"
+          type="password"
+          required
+          class="mt-1 w-full rounded-xl border border-meadow-willow px-3 py-3 outline-none focus:border-meadow-teal"
+        />
+      </label>
+      {% if form.password.errors %}
+        <p class="text-sm text-red-700">{{ form.password.errors }}</p>
+      {% endif %}
+      <button
+        type="submit"
+        class="min-h-12 w-full rounded-xl bg-meadow-teal font-medium text-white hover:bg-meadow-bondi"
+      >
+        Entrar
+      </button>
+    </form>
+  </section>
+{% endblock %}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}ProAula{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              meadow: {
+                lime: "#d9ed92",
+                light: "#b5e48c",
+                willow: "#99d98c",
+                emerald: "#76c893",
+                mist: "#52b69a",
+                teal: "#34a0a4",
+                bondi: "#168aad",
+                cerulean: "#1a759f",
+                baltic: "#1e6091",
+                yale: "#184e77",
+              },
+            },
+            fontFamily: {
+              display: ['"Plus Jakarta Sans"', "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="min-h-screen bg-[#f8fafc] font-sans text-meadow-yale">
+    <header class="bg-meadow-yale text-white">
+      <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+        <div>
+          <p class="font-display text-xl font-semibold">ProAula</p>
+          <p class="text-sm text-meadow-lime">Panel del personal</p>
+        </div>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="min-h-12 rounded-xl bg-meadow-teal px-5 font-medium text-white hover:bg-meadow-bondi"
+            >
+              Salir
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </header>
+    <main class="mx-auto max-w-5xl px-6 py-8">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

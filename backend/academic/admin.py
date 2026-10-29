@@ -2,8 +2,7 @@
 Registro de los modelos del colegio en el admin de Django.
 
 El usuario usa UserAdmin para que la contraseña se guarde hasheada.
-El resto son listados simples para que el personal revise los datos
-mientras no exista todavía el panel con plantillas propias.
+El resto son listados para que secretaría localice aulas, alumnos y pagos.
 """
 
 from django.contrib import admin

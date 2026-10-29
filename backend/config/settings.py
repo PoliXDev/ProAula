@@ -1,7 +1,7 @@
 """
 Configuración del proyecto ProAula.
 
-La clave, el modo depuración y los orígenes del portal React se leen
+La clave, el modo depuración y los orígenes del portal familiar se leen
 desde el .env de la raíz. Así el repositorio no guarda secretos y el
 navegador solo puede llamar a la API desde los orígenes autorizados.
 """
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'academic',
 ]
 
-# Sustituye al User de Django antes de la primera migración.
+# El usuario del colegio sustituye al usuario genérico de Django.
 AUTH_USER_MODEL = 'academic.User'
 
 MIDDLEWARE = [
@@ -75,6 +75,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Hace falta para el {% csrf_token %} del login y del cierre de sesión.
+                'django.template.context_processors.csrf',
             ],
         },
     },
@@ -136,3 +138,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# El personal entra por /acceso/ y vuelve al resumen. Salir regresa al formulario.
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'

@@ -1,10 +1,8 @@
 """
-Datos del colegio: usuarios, aulas, alumnos, notas, asistencia,
-comunicados y mensualidades.
+Modelos de dominio académico y administrativo de ProAula.
 
-Viven en una sola app para poder explicar el esquema en la defensa
-sin saltar entre paquetes. Las reglas que no pueden depender del
-formulario (nota 1-20 y una sola asistencia por día) se validan aquí.
+Centraliza la gestión de usuarios, aulas, matrículas, evaluaciones,
+asistencia diaria, comunicados internos y control de mensualidades.
 """
 
 from django.contrib.auth.models import AbstractUser
@@ -14,10 +12,11 @@ from django.db import models
 
 class User(AbstractUser):
     """
-    Usuario del sistema, personal o representante.
+    Usuario personalizado del sistema.
 
-    Un solo modelo de login evita dos autenticaciones. El rol separa
-    quién entra al panel (STAFF) y quién solo verá a sus hijos (PARENT).
+    Distingue mediante el rol entre el personal del centro (STAFF), con
+    acceso al panel de gestión, y los representantes (PARENT), con acceso
+    exclusivo a la consulta académica de sus representados.
     """
 
     class Role(models.TextChoices):
@@ -43,10 +42,9 @@ class User(AbstractUser):
 
 class Classroom(models.Model):
     """
-    Aula de un curso escolar.
+    Aula o grupo académico asignado a un periodo escolar.
 
-    Agrupa alumnos y comunicados de clase. La combinación de nombre,
-    sección y año no puede repetirse: no hay dos "3er Grado A" en 2026-2027.
+    Restringe la duplicidad combinando grado, sección y año escolar.
     """
 
     name = models.CharField("nombre", max_length=80)
@@ -70,11 +68,11 @@ class Classroom(models.Model):
 
 class Student(models.Model):
     """
-    Alumno matriculado en un aula y vinculado a un representante.
+    Ficha del alumno matriculado.
 
-    El código de matrícula identifica al alumno dentro del colegio.
-    El padre solo puede ser un usuario con rol PARENT: un docente
-    no queda asignado como familia por error en el admin.
+    Vincula al estudiante con su aula actual y su representante legal.
+    Se restringe el borrado en cascada (PROTECT) para preservar el
+    historial académico ante bajas accidentales de aulas o usuarios.
     """
 
     first_name = models.CharField("nombre", max_length=80)
@@ -86,7 +84,6 @@ class Student(models.Model):
         related_name="students",
         verbose_name="aula",
     )
-    # PROTECT: no se borra un aula o un padre si todavía tienen alumnos.
     parent = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
@@ -106,10 +103,10 @@ class Student(models.Model):
 
 class Grade(models.Model):
     """
-    Calificación de un alumno en una asignatura.
+    Registro de calificación de un alumno por asignatura y evaluación.
 
-    Las asignaturas son una lista fija: no hace falta una tabla extra.
-    La nota se rechaza fuera de 1 a 20 en el servidor, no solo en el formulario.
+    Valida a nivel de modelo la escala de evaluación del centro (1 a 20 puntos),
+    admitiendo un decimal para promedios y cortes parciales.
     """
 
     class Subject(models.TextChoices):
@@ -127,7 +124,6 @@ class Grade(models.Model):
     )
     subject = models.CharField("asignatura", max_length=20, choices=Subject.choices)
     evaluation_name = models.CharField("evaluación", max_length=120)
-    # Un decimal admite 18.5 y los validadores cierran el rango de la guía.
     score = models.DecimalField(
         "nota",
         max_digits=4,
@@ -148,10 +144,10 @@ class Grade(models.Model):
 
 class Attendance(models.Model):
     """
-    Asistencia de un alumno en un día.
+    Control de asistencia diaria del alumno.
 
-    Solo puede existir un registro por alumno y fecha. Si el personal
-    intenta cargar el mismo día dos veces, la base de datos lo impide.
+    Garantiza mediante restricción en base de datos que solo exista
+    un parte de asistencia por estudiante en cada fecha.
     """
 
     class Status(models.TextChoices):
@@ -186,11 +182,10 @@ class Attendance(models.Model):
 
 class Announcement(models.Model):
     """
-    Comunicado del colegio o de un aula.
+    Comunicado oficial emitido por el centro educativo.
 
-    Si el aula va vacía, el aviso es para todo el centro. Si tiene aula,
-    solo corresponde a esa clase. No se borra el aula en cascada: el aviso
-    no debe convertirse en general por un borrado accidental.
+    Si no se especifica un aula destinataria, el comunicado tiene alcance
+    general para todas las familias del colegio.
     """
 
     title = models.CharField("título", max_length=150)
@@ -216,10 +211,10 @@ class Announcement(models.Model):
 
 class TuitionFee(models.Model):
     """
-    Mensualidad de un alumno.
+    Estado de cuenta y mensualidades asociadas a un alumno.
 
-    Va aparte de las notas: el portal puede mostrar si el pago está
-    pendiente sin mezclar el cobro con el expediente académico.
+    Registra el concepto de cobro en divisas (USD), su fecha de vencimiento
+    y el estado administrativo del pago.
     """
 
     class Status(models.TextChoices):

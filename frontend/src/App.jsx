@@ -1,7 +1,7 @@
 /**
- * Pantalla inicial del portal familiar.
- * Aún no llama a la API: comprueba que React y la paleta Meadow Green
- * compilan. El representante solo verá aquí los datos de sus hijos.
+ * Pantalla de entrada del portal familiar.
+ * El representante consulta aquí las notas, la asistencia, los
+ * comunicados y las mensualidades de sus hijos.
  */
 export default function App() {
   return (
@@ -13,9 +13,8 @@ export default function App() {
       <section className="mx-auto mt-10 max-w-xl rounded-2xl bg-white p-6 shadow-sm">
         <h1 className="font-display text-xl">Acceso de familias</h1>
         <p className="mt-2 text-sm">
-          Aquí el representante consultará notas, asistencia, comunicados
-          y mensualidades. La conexión con la API de Django llega en el
-          siguiente paso.
+          Consulta las notas, la asistencia, los comunicados y las
+          mensualidades de tus hijos.
         </p>
       </section>
     </main>

@@ -1,0 +1,47 @@
+{% extends "academic/base.html" %}
+
+{% block title %}Resumen · ProAula{% endblock %}
+
+{% block content %}
+  <h1 class="font-display text-2xl font-semibold">Resumen del colegio</h1>
+  <p class="mt-1 text-sm text-meadow-cerulean">
+    Hola, {{ user.get_full_name|default:user.username }}.
+  </p>
+
+  <section class="mt-6 grid gap-4 sm:grid-cols-3">
+    <article class="rounded-2xl bg-white p-6 shadow-sm">
+      <p class="text-sm text-meadow-cerulean">Aulas</p>
+      <p class="mt-2 font-display text-3xl font-semibold">{{ classroom_count }}</p>
+    </article>
+    <article class="rounded-2xl bg-white p-6 shadow-sm">
+      <p class="text-sm text-meadow-cerulean">Alumnos</p>
+      <p class="mt-2 font-display text-3xl font-semibold">{{ student_count }}</p>
+    </article>
+    <article class="rounded-2xl bg-white p-6 shadow-sm">
+      <p class="text-sm text-meadow-cerulean">Recibos pendientes</p>
+      <p class="mt-2 font-display text-3xl font-semibold text-meadow-teal">
+        {{ pending_fees_count }}
+      </p>
+    </article>
+  </section>
+
+  <section class="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+    <h2 class="font-display text-lg font-semibold">Comunicados recientes</h2>
+    <ul class="mt-4 space-y-3">
+      {% for announcement in announcements %}
+        <li class="border-b border-meadow-lime pb-3 last:border-0">
+          <p class="font-medium">{{ announcement.title }}</p>
+          <p class="text-sm text-meadow-cerulean">
+            {% if announcement.classroom %}
+              {{ announcement.classroom }}
+            {% else %}
+              Todo el colegio
+            {% endif %}
+          </p>
+        </li>
+      {% empty %}
+        <li class="text-sm">Todavía no hay comunicados.</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}
