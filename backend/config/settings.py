@@ -36,7 +36,12 @@ INSTALLED_APPS = [
     # API del portal familiar y control de origen del navegador.
     'rest_framework',
     'corsheaders',
+    # Datos del colegio y usuario con rol (personal o representante).
+    'academic',
 ]
+
+# Sustituye al User de Django antes de la primera migración.
+AUTH_USER_MODEL = 'academic.User'
 
 MIDDLEWARE = [
     # Antes de CommonMiddleware, para contestar el preflight OPTIONS
