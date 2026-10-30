@@ -1,0 +1,22 @@
+{% extends "academic/base.html" %}
+
+{% block title %}{{ title }} · ProAula{% endblock %}
+
+{% block content %}
+  <h1 class="font-display text-2xl font-semibold">{{ title }}</h1>
+  <form method="post" class="mt-6 max-w-xl rounded-2xl bg-white p-6 shadow-sm">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="mb-4 text-sm text-red-700">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for field in form %}
+      {% include "academic/includes/field.html" %}
+    {% endfor %}
+    <button
+      type="submit"
+      class="min-h-12 rounded-xl bg-meadow-teal px-5 font-medium text-white hover:bg-meadow-bondi"
+    >
+      Guardar
+    </button>
+  </form>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "academic/base.html" %}
+
+{% block title %}Comunicados · ProAula{% endblock %}
+
+{% block content %}
+  <div class="mb-6 flex items-center justify-between gap-4">
+    <h1 class="font-display text-2xl font-semibold">Comunicados</h1>
+    <a class="inline-flex min-h-12 items-center rounded-xl bg-meadow-teal px-5 font-medium text-white hover:bg-meadow-bondi" href="{% url 'announcement_create' %}">Nuevo comunicado</a>
+  </div>
+  <div class="space-y-3">
+    {% for announcement in announcements %}
+      <article class="rounded-2xl bg-white p-5 shadow-sm">
+        <h2 class="font-display text-lg font-semibold">{{ announcement.title }}</h2>
+        <p class="text-sm text-meadow-cerulean">
+          {% if announcement.classroom %}{{ announcement.classroom }}{% else %}Todo el colegio{% endif %}
+        </p>
+        <p class="mt-2 text-sm">{{ announcement.message }}</p>
+      </article>
+    {% empty %}
+      <p>No hay comunicados.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

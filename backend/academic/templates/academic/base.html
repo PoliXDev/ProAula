@@ -57,8 +57,28 @@
           </form>
         {% endif %}
       </div>
+      {% if user.is_authenticated and user.role == "STAFF" %}
+        <nav class="border-t border-white/10">
+          <ul class="mx-auto flex max-w-5xl flex-wrap gap-1 px-4 py-2 text-sm">
+            <li><a class="inline-flex min-h-12 items-center rounded-full px-3 hover:bg-white/10" href="{% url 'dashboard' %}">Resumen</a></li>
+            <li><a class="inline-flex min-h-12 items-center rounded-full px-3 hover:bg-white/10" href="{% url 'classroom_list' %}">Aulas</a></li>
+            <li><a class="inline-flex min-h-12 items-center rounded-full px-3 hover:bg-white/10" href="{% url 'student_list' %}">Alumnos</a></li>
+            <li><a class="inline-flex min-h-12 items-center rounded-full px-3 hover:bg-white/10" href="{% url 'grade_list' %}">Calificaciones</a></li>
+            <li><a class="inline-flex min-h-12 items-center rounded-full px-3 hover:bg-white/10" href="{% url 'attendance_list' %}">Asistencia</a></li>
+            <li><a class="inline-flex min-h-12 items-center rounded-full px-3 hover:bg-white/10" href="{% url 'announcement_list' %}">Comunicados</a></li>
+            <li><a class="inline-flex min-h-12 items-center rounded-full px-3 hover:bg-white/10" href="{% url 'tuition_list' %}">Mensualidades</a></li>
+          </ul>
+        </nav>
+      {% endif %}
     </header>
     <main class="mx-auto max-w-5xl px-6 py-8">
+      {% if messages %}
+        <ul class="mb-6 space-y-2">
+          {% for message in messages %}
+            <li class="rounded-xl bg-meadow-lime px-4 py-3 text-sm">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
       {% block content %}{% endblock %}
     </main>
   </body>

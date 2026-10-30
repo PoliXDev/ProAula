@@ -1,0 +1,32 @@
+{% extends "academic/base.html" %}
+
+{% block title %}Aulas · ProAula{% endblock %}
+
+{% block content %}
+  <div class="mb-6 flex items-center justify-between gap-4">
+    <h1 class="font-display text-2xl font-semibold">Aulas</h1>
+    <a class="inline-flex min-h-12 items-center rounded-xl bg-meadow-teal px-5 font-medium text-white hover:bg-meadow-bondi" href="{% url 'classroom_create' %}">Nueva aula</a>
+  </div>
+  <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-meadow-lime/40 text-meadow-yale">
+        <tr>
+          <th class="px-4 py-3 font-medium">Nombre</th>
+          <th class="px-4 py-3 font-medium">Sección</th>
+          <th class="px-4 py-3 font-medium">Año escolar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for classroom in classrooms %}
+          <tr class="border-t border-meadow-lime">
+            <td class="px-4 py-3">{{ classroom.name }}</td>
+            <td class="px-4 py-3">{{ classroom.section }}</td>
+            <td class="px-4 py-3">{{ classroom.school_year }}</td>
+          </tr>
+        {% empty %}
+          <tr><td class="px-4 py-6" colspan="3">No hay aulas registradas.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

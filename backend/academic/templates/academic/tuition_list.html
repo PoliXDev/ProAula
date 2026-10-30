@@ -1,0 +1,45 @@
+{% extends "academic/base.html" %}
+
+{% block title %}Mensualidades · ProAula{% endblock %}
+
+{% block content %}
+  <div class="mb-6 flex items-center justify-between gap-4">
+    <h1 class="font-display text-2xl font-semibold">Mensualidades</h1>
+    <a class="inline-flex min-h-12 items-center rounded-xl bg-meadow-teal px-5 font-medium text-white hover:bg-meadow-bondi" href="{% url 'tuition_create' %}">Nueva mensualidad</a>
+  </div>
+  <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-meadow-lime/40">
+        <tr>
+          <th class="px-4 py-3 font-medium">Alumno</th>
+          <th class="px-4 py-3 font-medium">Concepto</th>
+          <th class="px-4 py-3 font-medium">Importe</th>
+          <th class="px-4 py-3 font-medium">Vencimiento</th>
+          <th class="px-4 py-3 font-medium">Estado</th>
+          <th class="px-4 py-3 font-medium"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fee in fees %}
+          <tr class="border-t border-meadow-lime">
+            <td class="px-4 py-3">{{ fee.student }}</td>
+            <td class="px-4 py-3">{{ fee.concept }}</td>
+            <td class="px-4 py-3">{{ fee.amount_usd }} USD</td>
+            <td class="px-4 py-3">{{ fee.due_date }}</td>
+            <td class="px-4 py-3">{{ fee.get_status_display }}</td>
+            <td class="px-4 py-3">
+              <form method="post" action="{% url 'tuition_toggle' fee.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="min-h-12 rounded-xl border border-meadow-teal px-4 font-medium text-meadow-teal hover:bg-meadow-lime">
+                  {% if fee.status == "PENDING" %}Marcar pagada{% else %}Marcar pendiente{% endif %}
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td class="px-4 py-6" colspan="6">No hay mensualidades.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

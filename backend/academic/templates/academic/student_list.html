@@ -1,0 +1,38 @@
+{% extends "academic/base.html" %}
+
+{% block title %}Alumnos · ProAula{% endblock %}
+
+{% block content %}
+  <div class="mb-6 flex items-center justify-between gap-4">
+    <h1 class="font-display text-2xl font-semibold">Alumnos</h1>
+    <a class="inline-flex min-h-12 items-center rounded-xl bg-meadow-teal px-5 font-medium text-white hover:bg-meadow-bondi" href="{% url 'student_create' %}">Nuevo alumno</a>
+  </div>
+  <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-meadow-lime/40">
+        <tr>
+          <th class="px-4 py-3 font-medium">Alumno</th>
+          <th class="px-4 py-3 font-medium">Matrícula</th>
+          <th class="px-4 py-3 font-medium">Aula</th>
+          <th class="px-4 py-3 font-medium">Representante</th>
+          <th class="px-4 py-3 font-medium"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+          <tr class="border-t border-meadow-lime">
+            <td class="px-4 py-3">{{ student.last_name }}, {{ student.first_name }}</td>
+            <td class="px-4 py-3">{{ student.enrollment_code }}</td>
+            <td class="px-4 py-3">{{ student.classroom }}</td>
+            <td class="px-4 py-3">{{ student.parent }}</td>
+            <td class="px-4 py-3">
+              <a class="font-medium text-meadow-bondi" href="{% url 'student_update' student.pk %}">Editar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td class="px-4 py-6" colspan="5">No hay alumnos matriculados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
